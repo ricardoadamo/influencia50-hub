@@ -1,1 +1,1 @@
-{"outputDirectory":"público","rewrites":[{"source":"/api/chat","destination":"/API/chat.js"}]}
+{"outputDirectory":"public","rewrites":[{"source":"/api/chat","destination":"/api/chat.js"}]}
