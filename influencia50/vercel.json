@@ -1,6 +1,0 @@
-{
-  "outputDirectory": "influencia50/public",
-  "rewrites": [
-    { "source": "/api/chat", "destination": "/influencia50/api/chat.js" }
-  ]
-}
