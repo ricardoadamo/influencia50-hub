@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Influência 5.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#e8341a;--bg:#0a0a0a;--surface:#111;--border:rgba(255,255,255,0.08);--text:rgba(255,255,255,0.85);--muted:rgba(255,255,255,0.35)}
+html,body{height:100%;background:var(--bg);color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;min-height:100vh}
+.screen.active{display:flex}
+
+/* LOGIN */
+#login{align-items:center;justify-content:center;gap:40px;padding:32px}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:8px;text-align:center}
+.login-tagline{font-size:11px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;text-align:center;margin-top:-30px}
+.login-form{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px}
+.login-input{background:#161616;border:0.5px solid var(--border);border-radius:8px;padding:13px 18px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;letter-spacing:2px}
+.login-input:focus{border-color:rgba(255,255,255,0.25)}
+.login-input::placeholder{color:rgba(255,255,255,0.18);letter-spacing:1px}
+.login-btn{background:var(--red);color:#fff;border:none;border-radius:8px;padding:14px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;transition:opacity 0.2s}
+.login-btn:hover{opacity:.85}
+.login-err{font-size:12px;color:rgba(255,100,80,0.8);text-align:center;min-height:16px}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;cursor:pointer}
+.nav-logo span{color:var(--red)}
+.nav-links{display:flex;gap:32px}
+.nav-link{font-size:13px;color:var(--muted);cursor:pointer;letter-spacing:0.5px;transition:color 0.2s;background:none;border:none;font-family:'DM Sans',sans-serif}
+.nav-link:hover,.nav-link.active{color:#fff}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-icon{width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+
+/* HUB HOME */
+.hub-hero{padding:48px 32px 32px}
+.hub-hero h1{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;margin-bottom:6px}
+.hub-hero p{font-size:13px;color:var(--muted)}
+.hub-hero .cta-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid var(--red);color:var(--red);padding:8px 20px;border-radius:20px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:1px;margin-top:16px;transition:all 0.2s}
+.hub-hero .cta-btn:hover{background:var(--red);color:#fff}
+
+.section-title{font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 32px;margin-bottom:16px}
+
+/* NICHO CAROUSEL */
+.carousel-wrap{padding:0 32px;position:relative;overflow:hidden}
+.carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:8px}
+.carousel::-webkit-scrollbar{display:none}
+.nicho-card{flex:0 0 180px;height:120px;background:var(--surface);border:0.5px solid var(--border);border-radius:12px;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;scroll-snap-align:start;transition:all 0.25s;position:relative;overflow:hidden}
+.nicho-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(232,52,26,0.0),rgba(232,52,26,0.0));transition:background 0.3s}
+.nicho-card:hover{border-color:rgba(232,52,26,0.5);transform:translateY(-2px)}
+.nicho-card:hover::before{background:linear-gradient(135deg,rgba(232,52,26,0.08),rgba(232,52,26,0.02))}
+.nicho-card.selected{border-color:var(--red);box-shadow:0 0 20px rgba(232,52,26,0.2)}
+.nicho-card.selected::before{background:linear-gradient(135deg,rgba(232,52,26,0.12),rgba(232,52,26,0.04))}
+.nicho-icon{font-size:22px;margin-bottom:8px}
+.nicho-name{font-size:13px;font-weight:500;line-height:1.3}
+.nicho-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+.carousel-nav{display:flex;align-items:center;gap:12px;padding:12px 32px 0;justify-content:flex-end}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);transition:all 0.2s}
+.carousel-dot.active{background:var(--red);width:20px;border-radius:3px}
+.carousel-arrow{background:none;border:0.5px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.carousel-arrow:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+
+/* AGENTS SECTION */
+.agents-section{padding:32px 32px 0;flex:1}
+.agents-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.agents-header h2{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px}
+.agents-badge{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--red);border:0.5px solid rgba(232,52,26,0.4);padding:4px 12px;border-radius:20px}
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border)}
+.agent-card{background:var(--bg);padding:28px 24px;cursor:pointer;transition:background 0.2s;position:relative;border:none;text-align:left;color:#fff;font-family:'DM Sans',sans-serif}
+.agent-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background 0.3s}
+.agent-card:hover{background:#0f0f0f}
+.agent-card:hover::after{background:var(--red)}
+.agent-card.placeholder{opacity:0.35;cursor:default}
+.agent-card.placeholder:hover{background:var(--bg)}
+.agent-card.placeholder:hover::after{background:transparent}
+.agent-num{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.2);margin-bottom:16px}
+.agent-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;line-height:1.1;margin-bottom:10px}
+.agent-desc{font-size:12px;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.45);margin-bottom:24px}
+.agent-cta{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);transition:color 0.2s}
+.agent-card:hover:not(.placeholder) .agent-cta{color:var(--red)}
+.agent-arrow{transition:transform 0.2s}
+.agent-card:hover:not(.placeholder) .agent-arrow{transform:translateX(4px)}
+.placeholder-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);border:0.5px solid rgba(255,255,255,0.1);padding:3px 10px;border-radius:20px;display:inline-block}
+
+/* CHAT */
+#chat{background:var(--bg)}
+.chat-nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10}
+.back-btn{background:none;border:0.5px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:11px;letter-spacing:1px;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.back-btn:hover{color:#fff;border-color:rgba(255,255,255,0.3)}
+.chat-info{flex:1}
+.chat-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;line-height:1}
+.chat-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.online{width:7px;height:7px;border-radius:50%;background:#2d9e5f}
+.messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;min-height:60vh}
+.msg{max-width:76%;padding:13px 16px;font-size:14px;line-height:1.65;font-weight:300}
+.msg.agent{background:#141414;color:var(--text);border:0.5px solid var(--border);align-self:flex-start;border-radius:4px 12px 12px 12px;white-space:pre-wrap}
+.msg.user{background:#1a1a1a;color:rgba(255,255,255,0.9);border:0.5px solid rgba(255,255,255,0.08);align-self:flex-end;border-radius:12px 4px 12px 12px}
+.msg.typing{display:flex;gap:5px;align-items:center;padding:14px 16px}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.35);animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.input-wrap{padding:16px 24px;border-top:0.5px solid var(--border);display:flex;gap:10px;background:var(--bg);position:sticky;bottom:0}
+.msg-input{flex:1;background:#141414;border:0.5px solid var(--border);border-radius:8px;padding:12px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;transition:border-color 0.2s;min-height:44px;max-height:120px}
+.msg-input:focus{border-color:rgba(255,255,255,0.2)}
+.msg-input::placeholder{color:rgba(255,255,255,0.18)}
+.send-btn{background:var(--red);color:#fff;border:none;border-radius:8px;padding:0 20px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;transition:opacity 0.2s;flex-shrink:0}
+.send-btn:hover{opacity:.85}
+.send-btn:disabled{opacity:.3;cursor:not-allowed}
+.powered{text-align:center;padding:8px;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.1);text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="screen active">
+  <div class="login-logo">INFLUÊNCIA 5.0</div>
+  <div class="login-tagline">Acesso restrito</div>
+  <div class="login-form">
+    <input class="login-input" type="password" id="pwd" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')auth()">
+    <button class="login-btn" onclick="auth()">ENTRAR</button>
+    <div class="login-err" id="err"></div>
+  </div>
+</div>
+
+<!-- HUB -->
+<div id="hub" class="screen">
+  <nav class="nav">
+    <div class="nav-logo" onclick="showHub()">INFLUÊN<span>CIA</span> 5.0</div>
+    <div class="nav-links">
+      <button class="nav-link active">Início</button>
+      <button class="nav-link">Categorias</button>
+      <button class="nav-link">Minha área</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon">🔍</div>
+      <div class="nav-icon">👤</div>
+    </div>
+  </nav>
+
+  <div class="hub-hero">
+    <h1>Escolha sua profissão</h1>
+    <p>Acesse agentes criados para o seu setor.</p>
+    <button class="cta-btn" onclick="scrollToAgents()">Continuar →</button>
+  </div>
+
+  <p class="section-title">Setores</p>
+
+  <div class="carousel-wrap">
+    <div class="carousel" id="carousel">
+      <div class="nicho-card" onclick="selectNicho(0)">
+        <div class="nicho-icon">🎓</div>
+        <div class="nicho-name">Educação</div>
+        <div class="nicho-sub">Escolas & Faculdades</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(1)">
+        <div class="nicho-icon">🛍️</div>
+        <div class="nicho-name">Varejo</div>
+        <div class="nicho-sub">Lojas & Shoppings</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(2)">
+        <div class="nicho-icon">🏗️</div>
+        <div class="nicho-name">Construtoras</div>
+        <div class="nicho-sub">Construtoras & Corretores</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(3)">
+        <div class="nicho-icon">🚗</div>
+        <div class="nicho-name">Automotivo</div>
+        <div class="nicho-sub">Concessionárias</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(4)">
+        <div class="nicho-icon">🍽️</div>
+        <div class="nicho-name">Food & Restaurantes</div>
+        <div class="nicho-sub">Indústria Alimentícia</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(5)">
+        <div class="nicho-icon">🏥</div>
+        <div class="nicho-name">Saúde</div>
+        <div class="nicho-sub">Labs & Hospitais</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(6)">
+        <div class="nicho-icon">🐾</div>
+        <div class="nicho-name">Pet</div>
+        <div class="nicho-sub">Pet Shops</div>
+      </div>
+      <div class="nicho-card" onclick="selectNicho(7)">
+        <div class="nicho-icon">🏪</div>
+        <div class="nicho-name">PME</div>
+        <div class="nicho-sub">Pequenos & Médios</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-nav">
+    <button class="carousel-arrow" onclick="slideCarousel(-1)">‹</button>
+    <div class="carousel-dot active" id="dot0"></div>
+    <div class="carousel-dot" id="dot1"></div>
+    <div class="carousel-dot" id="dot2"></div>
+    <button class="carousel-arrow" onclick="slideCarousel(1)">›</button>
+  </div>
+
+  <div class="agents-section" id="agents-section">
+    <div class="agents-header">
+      <h2 id="agents-title">SELECIONE UM SETOR</h2>
+      <span class="agents-badge" id="agents-badge">8 SETORES</span>
+    </div>
+    <div class="agents-grid" id="agents-grid"></div>
+  </div>
+  <div style="height:40px"></div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="screen">
+  <div class="chat-nav">
+    <button class="back-btn" onclick="goBack()">← Voltar</button>
+    <div class="chat-info">
+      <div class="chat-name" id="chat-name"></div>
+      <div class="chat-sub" id="chat-sub"></div>
+    </div>
+    <div class="online"></div>
+  </div>
+  <div class="messages" id="messages"></div>
+  <div class="input-wrap">
+    <textarea class="msg-input" id="user-input" placeholder="Digite sua mensagem..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMsg()">ENVIAR</button>
+  </div>
+  <div class="powered">Influência 5.0 — Powered by Claude AI</div>
+</div>
+
+<script>
+const SENHA = '2026influencia';
+
+// ============================================================
+// NICHOS — adicione os agentes de cada setor aqui
+// Cada agente: { name, desc, welcome, prompt }
+// placeholder: true = ainda sem agente configurado
+// ============================================================
+const nichos = [
+  {
+    name: "Educação",
+    sub: "Escolas & Faculdades",
+    agents: [
+      { name: "EDU.LEAD", desc: "Captação e qualificação de alunos. Identifica intenção de matrícula e guia o lead até a conversão.", welcome: "Olá! Sou o EDU.LEAD, especialista em captação de alunos.\n\nCole aqui a mensagem de um interessado e eu analiso a intenção e gero a resposta ideal.", prompt: `Você é EDU.LEAD, especialista em captação de alunos para instituições de ensino. Analisa mensagens de leads interessados em cursos/matrículas, identifica o estágio de decisão e gera respostas humanizadas que avançam o lead no funil. Estrutura: 🎓 Intenção, 🎯 Justificativa, 💬 Resposta, CTA, Follow-ups. Tom profissional e acolhedor.` },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Varejo",
+    sub: "Lojas & Shoppings",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em varejo em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Construtoras",
+    sub: "Construtoras & Corretores",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em construtoras em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Automotivo",
+    sub: "Concessionárias",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em concessionárias em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Food & Restaurantes",
+    sub: "Indústria Alimentícia",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em food service em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Saúde",
+    sub: "Labs & Hospitais",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em saúde em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "Pet",
+    sub: "Pet Shops",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em pet shops em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  },
+  {
+    name: "PME",
+    sub: "Pequenos & Médios",
+    agents: [
+      { placeholder: true, name: "EM BREVE", desc: "Agente especializado em PMEs em desenvolvimento.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" },
+      { placeholder: true, name: "EM BREVE", desc: "Agente em desenvolvimento para este setor.", welcome: "", prompt: "" }
+    ]
+  }
+];
+
+// AUTH
+function auth() {
+  if (document.getElementById('pwd').value === SENHA) {
+    sessionStorage.setItem('inf50_ok', '1');
+    show('hub');
+    renderAgents(0);
+    selectNicho(0);
+  } else {
+    document.getElementById('err').textContent = 'Senha incorreta.';
+    document.getElementById('pwd').value = '';
+  }
+}
+if (sessionStorage.getItem('inf50_ok')) { show('hub'); renderAgents(0); selectNicho(0); }
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// NICHO
+let currentNicho = 0;
+function selectNicho(idx) {
+  currentNicho = idx;
+  document.querySelectorAll('.nicho-card').forEach((c,i) => c.classList.toggle('selected', i===idx));
+  renderAgents(idx);
+  document.getElementById('agents-section').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderAgents(idx) {
+  const n = nichos[idx];
+  document.getElementById('agents-title').textContent = n.name.toUpperCase();
+  const active = n.agents.filter(a => !a.placeholder).length;
+  document.getElementById('agents-badge').textContent = active + ' AGENTE' + (active!==1?'S':'') + ' ATIVO' + (active!==1?'S':'');
+  const grid = document.getElementById('agents-grid');
+  grid.innerHTML = '';
+  n.agents.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'agent-card' + (a.placeholder ? ' placeholder' : '');
+    div.innerHTML = `
+      <div class="agent-num">0${i+1}</div>
+      <div class="agent-name">${a.name}</div>
+      <div class="agent-desc">${a.desc}</div>
+      ${a.placeholder
+        ? '<span class="placeholder-tag">Em breve</span>'
+        : '<div class="agent-cta">Conversar <span class="agent-arrow">→</span></div>'
+      }`;
+    if (!a.placeholder) div.onclick = () => openChat(idx, i);
+    grid.appendChild(div);
+  });
+}
+
+function scrollToAgents() {
+  document.getElementById('agents-section').scrollIntoView({behavior:'smooth'});
+}
+
+// CAROUSEL
+function slideCarousel(dir) {
+  const c = document.getElementById('carousel');
+  c.scrollBy({left: dir * 200, behavior: 'smooth'});
+}
+
+// CHAT
+let curNicho = 0, curAgent = 0, history = [], loading = false;
+
+function openChat(nichoIdx, agentIdx) {
+  curNicho = nichoIdx; curAgent = agentIdx;
+  history = [];
+  const a = nichos[nichoIdx].agents[agentIdx];
+  document.getElementById('chat-name').textContent = a.name;
+  document.getElementById('chat-sub').textContent = nichos[nichoIdx].name + ' — ' + nichos[nichoIdx].sub;
+  document.getElementById('messages').innerHTML = '';
+  addMsg(a.welcome, 'agent');
+  show('chat');
+  document.getElementById('user-input').focus();
+}
+
+function goBack() { show('hub'); }
+function showHub() { show('hub'); }
+
+function addMsg(text, role) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.textContent = text;
+  document.getElementById('messages').appendChild(el);
+  document.getElementById('messages').scrollTop = 99999;
+}
+
+function showTyping() {
+  const el = document.createElement('div');
+  el.className = 'msg agent typing'; el.id = 'typing';
+  el.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  document.getElementById('messages').appendChild(el);
+  document.getElementById('messages').scrollTop = 99999;
+}
+
+function removeTyping() { const t = document.getElementById('typing'); if(t) t.remove(); }
+
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} }
+
+function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+async function sendMsg() {
+  if(loading) return;
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = ''; input.style.height = 'auto';
+  addMsg(text, 'user');
+  history.push({role:'user', content:text});
+  loading = true;
+  document.getElementById('send-btn').disabled = true;
+  showTyping();
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages: history, systemPrompt: nichos[curNicho].agents[curAgent].prompt})
+    });
+    const data = await res.json();
+    removeTyping();
+    const reply = data.reply || 'Erro ao processar resposta.';
+    addMsg(reply, 'agent');
+    history.push({role:'assistant', content:reply});
+  } catch(e) {
+    removeTyping();
+    addMsg('Erro de conexão. Tente novamente.', 'agent');
+  }
+  loading = false;
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('user-input').focus();
+}
+</script>
+</body>
+</html>
