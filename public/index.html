@@ -297,7 +297,7 @@ async function sendMessage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('chatInput').addEventListener('keypress', function(e) {
+  document.getElementById('chatInput').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
   document.getElementById('passwordInput').addEventListener('keypress', function(e) {
