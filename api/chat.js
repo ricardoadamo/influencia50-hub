@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (agentId === 'busdoor') {
     const lastUserMessage = messages[messages.length - 1]?.content || '';
     try {
-      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+      const baseUrl = 'https://influencia50-hub.vercel.app';
       const searchRes = await fetch(`${baseUrl}/api/busdoor-search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
