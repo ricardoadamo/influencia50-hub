@@ -163,6 +163,23 @@ const agents = [
 let currentAgent = null;
 let chatHistory = [];
 
+function getStorageKey() {
+  return 'chat_' + (currentAgent ? currentAgent.id : 'default');
+}
+function saveHistory() {
+  localStorage.setItem(getStorageKey(), JSON.stringify(chatHistory));
+}
+function loadHistory() {
+  var saved = localStorage.getItem(getStorageKey());
+  chatHistory = saved ? JSON.parse(saved) : [];
+}
+function clearHistory() {
+  localStorage.removeItem(getStorageKey());
+  chatHistory = [];
+  var msgs = document.getElementById('chatMessages');
+  if (msgs) msgs.innerHTML = '';
+}
+
 function validatePassword() {
   const password = document.getElementById('passwordInput').value;
   if (password === '2026influencia') {
@@ -188,7 +205,9 @@ function renderAgents() {
 
 function openAgent(agentId) {
   currentAgent = agents.find(a => a.id === agentId);
-  chatHistory = [];
+  loadHistory();
+  var msgs = document.getElementById('chatMessages');
+  if (msgs) msgs.innerHTML = '';
   document.getElementById('hubContainer').classList.remove('active');
   document.getElementById('chatContainer').classList.add('active');
   document.getElementById('chatTitle').textContent = currentAgent.name;
@@ -233,7 +252,7 @@ async function sendMessage() {
   if (!message) return;
 
   addMessage('user', message);
-  chatHistory.push({ role: 'user', content: message });
+  chatHistory.push({ role: 'user', content: message }); saveHistory();
   input.value = '';
 
   const button = document.getElementById('sendButton');
@@ -251,7 +270,7 @@ async function sendMessage() {
     const data = await response.json();
     removeLoading();
     addMessage('assistant', data.message);
-    chatHistory.push({ role: 'assistant', content: data.message });
+    chatHistory.push({ role: 'assistant', content: data.message }); saveHistory();
   } catch (error) {
     removeLoading();
     addMessage('assistant', 'Desculpe, ocorreu um erro. Tente novamente.');
