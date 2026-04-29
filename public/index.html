@@ -252,6 +252,15 @@ function removeLoading() {
   if (loading) loading.remove();
 }
 
+function appendMessage(role, content) {
+  const messagesDiv = document.getElementById('chatMessages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'message ' + role;
+  messageDiv.innerHTML = '<div class="message-content">' + (role === 'assistant' ? marked.parse(content) : escapeHtml(content)) + '</div>';
+  messagesDiv.appendChild(messageDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
 async function sendMessage() {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
