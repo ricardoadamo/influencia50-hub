@@ -1,1 +1,6 @@
-{"functions":{"api/*.js":{"runtime":"@vercel/node"}},"rewrites":[{"source":"/api/chat","destination":"/api/chat.js"},{"source":"/api/busdoor-search","destination":"/api/busdoor-search.js"}],"outputDirectory":"public"}
+{
+  "rewrites": [
+    { "source": "/api/chat", "destination": "/api/chat.js" },
+    { "source": "/api/busdoor-search", "destination": "/api/busdoor-search.js" }
+  ]
+}
