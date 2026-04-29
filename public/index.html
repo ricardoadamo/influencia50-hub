@@ -61,6 +61,7 @@
     .footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.3); font-size: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
     @media (max-width: 768px) { .agents-grid { grid-template-columns: 1fr; } .hub-header h1 { font-size: 32px; } .chat-messages { padding: 15px; } .message-content { max-width: 95%; } .login-box { padding: 30px 20px; } }
   </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 </head>
 <body>
 
@@ -160,7 +161,7 @@ function addMessage(role, content) {
   const messagesDiv = document.getElementById('chatMessages');
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${role}`;
-  messageDiv.innerHTML = `<div class="message-content">${escapeHtml(content)}</div>`;
+  messageDiv.innerHTML = `<div class="message-content">${role === "assistant" ? marked.parse(content) : escapeHtml(content)}</div>`;
   messagesDiv.appendChild(messageDiv);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
