@@ -183,6 +183,7 @@ function clearHistory() {
 function validatePassword() {
   const password = document.getElementById('passwordInput').value;
   if (password === '2026influencia') {
+    localStorage.setItem('isLoggedIn', 'true');
     document.getElementById('loginContainer').style.display = 'none';
     document.getElementById('hubContainer').classList.add('active');
     renderAgents();
@@ -190,6 +191,15 @@ function validatePassword() {
     document.getElementById('loginError').style.display = 'block';
   }
 }
+
+function checkLogin() {
+  if (localStorage.getItem('isLoggedIn') === 'true') {
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('hubContainer').classList.add('active');
+    renderAgents();
+  }
+}
+checkLogin();
 
 function renderAgents() {
   const grid = document.getElementById('agentsGrid');
