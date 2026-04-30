@@ -227,8 +227,9 @@ function openAgent(agentId) {
   document.getElementById('hubContainer').classList.remove('active');
   document.getElementById('chatContainer').classList.add('active');
   document.getElementById('chatTitle').textContent = currentAgent.name;
-  document.getElementById('chatMessages').innerHTML = '';
-  addMessage('assistant', 'Olá! Como posso ajudá-lo?');
+  if (chatHistory.length === 0) {
+    addMessage('assistant', 'Olá! Como posso ajudá-lo?');
+  }
 }
 
 function backToHub() {
