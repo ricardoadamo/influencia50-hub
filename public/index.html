@@ -216,6 +216,9 @@ function renderAgents() {
 function openAgent(agentId) {
   currentAgent = agents.find(a => a.id === agentId);
   loadHistory();
+  document.getElementById('hubContainer').classList.remove('active');
+  document.getElementById('chatContainer').classList.add('active');
+  document.getElementById('chatTitle').textContent = currentAgent.name;
   var msgs = document.getElementById('chatMessages');
   if (msgs) {
     msgs.innerHTML = '';
@@ -224,9 +227,6 @@ function openAgent(agentId) {
       else if (msg.role === 'assistant') appendMessage('assistant', msg.content);
     });
   }
-  document.getElementById('hubContainer').classList.remove('active');
-  document.getElementById('chatContainer').classList.add('active');
-  document.getElementById('chatTitle').textContent = currentAgent.name;
   if (chatHistory.length === 0) {
     addMessage('assistant', 'Olá! Como posso ajudá-lo?');
   }
