@@ -27,23 +27,22 @@ export default async function handler(req, res) {
     } catch (e) { console.error('RAG error:', e); }
   }
   try {
+    let apiMessages = [...messages];
+    if (image && apiMessages.length > 0) {
+      const last = apiMessages[apiMessages.length - 1];
+      if (last.role === 'user') {
+        apiMessages[apiMessages.length - 1] = {
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: image.type, data: image.data } },
+            { type: 'text', text: last.content }
+          ]
+        };
+      }
+    }
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-      // Adiciona imagem na última mensagem se existir
-      let apiMessages = [...messages];
-      if (image && apiMessages.length > 0) {
-        const last = apiMessages[apiMessages.length - 1];
-        if (last.role === 'user') {
-          apiMessages[apiMessages.length - 1] = {
-            role: 'user',
-            content: [
-              { type: 'image', source: { type: 'base64', media_type: image.type, data: image.data } },
-              { type: 'text', text: last.content }
-            ]
-          };
-        }
-      }
       body: JSON.stringify({ model: agentModel || 'claude-haiku-4-5-20251001', max_tokens: 4096, system: finalSystemPrompt, messages: apiMessages }),
     });
     if (!response.ok) { const error = await response.json(); return res.status(response.status).json({ error: error.message }); }
