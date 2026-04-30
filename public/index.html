@@ -140,7 +140,15 @@ if (localStorage.getItem('theme') === 'light') {
   <div class="chat-messages" id="chatMessages"></div>
   <div id="msgCounter" style="text-align:right; font-size:11px; padding:4px 20px 0; color:#6B7280;"></div>
   <div class="chat-input-area">
-    <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
+    <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="previewImage(this)">
+    <button onclick="document.getElementById('imageInput').click()" style="padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;cursor:pointer;font-size:18px;flex-shrink:0;" title="Anexar imagem">📎</button>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+      <div id="imagePreview" style="display:none;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;font-size:12px;color:#9CA3AF;display:none;align-items:center;gap:8px;">
+        <span id="imagePreviewName"></span>
+        <button onclick="clearImage()" style="background:none;border:none;color:#EF4444;cursor:pointer;font-size:14px;">✕</button>
+      </div>
+      <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
+    </div>
     <button id="sendButton" onclick="sendMessage()">Enviar</button>
   </div>
 </div>
@@ -163,6 +171,26 @@ const agents = [
 
 let currentAgent = null;
 let chatHistory = [];
+let pendingImage = null;
+
+function previewImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pendingImage = { data: e.target.result.split(',')[1], type: file.type };
+    const preview = document.getElementById('imagePreview');
+    document.getElementById('imagePreviewName').textContent = '📷 ' + file.name;
+    preview.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  pendingImage = null;
+  document.getElementById('imagePreview').style.display = 'none';
+  document.getElementById('imageInput').value = '';
+}
 
 // Planos: starter=70, profissional=100, enterprise=200
 const PLANOS = { starter: 70, profissional: 100, enterprise: 200 };
@@ -339,13 +367,14 @@ async function sendMessage() {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory.slice(-10), systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id, agentModel: currentAgent.model })
+      body: JSON.stringify({ messages: chatHistory.slice(-10), systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id, agentModel: currentAgent.model, image: pendingImage })
     });
     if (!response.ok) throw new Error('Erro ao chamar API');
     const data = await response.json();
     removeLoading();
     addMessage('assistant', data.message);
     chatHistory.push({ role: 'assistant', content: data.message }); saveHistory();
+    clearImage();
   } catch (error) {
     removeLoading();
     addMessage('assistant', 'Desculpe, ocorreu um erro. Tente novamente.');
