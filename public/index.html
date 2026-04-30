@@ -224,6 +224,7 @@ function openAgent(agentId) {
 function backToHub() {
   document.getElementById('chatContainer').classList.remove('active');
   document.getElementById('hubContainer').classList.add('active');
+  saveHistory();
   currentAgent = null;
   chatHistory = [];
 }
