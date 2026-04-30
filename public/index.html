@@ -146,18 +146,18 @@ if (localStorage.getItem('theme') === 'light') {
 
 <script>
 const agents = [
-  { id: 'ooh', name: 'PLANEJAMENTO OOH', description: 'Estratégia de mídia externa. Análise de impactos, cobertura e potencial de alcance em campanhas out-of-home.', systemPrompt: 'Você é um especialista em mídia OOH (Out-of-Home). Nunca use emojis. Seja direto, analítico e baseado em dados.' },
-  { id: 'busdoor', name: 'PLANEJAMENTO BUSDOOR', description: 'Especialista em mídia em transportes. Dados: 8.500 impactos/dia por ônibus. População SP: 11,45M.', systemPrompt: 'Você é um especialista em mídia em transportes (busdoor). 8.500 impactos/dia por ônibus. Nunca use emojis.' },
-  { id: 'traffic', name: 'GESTOR DE TRÁFEGO', description: 'Gestão de campanhas de mídia paga. Otimização de investimento, ROAS e performance em tempo real.', systemPrompt: 'Você é um gestor de tráfego experiente. Nunca use emojis. Foque em resultados mensuráveis.' },
-  { id: 'media-opt', name: 'OTIMIZADOR DE MÍDIA ON', description: 'Otimização de campanhas digitais. Análise de dados, segmentação de público e maximização de conversão.', systemPrompt: 'Você é um otimizador de mídia online. Nunca use emojis. Priorize ROI.' },
-  { id: 'sdr', name: 'SDR — CONVERSÃO DE VENDAS', description: 'Especialista em fechamento de vendas. Qualificação de leads, argumentação consultiva e aceleração de pipeline.', systemPrompt: 'Você é um SDR experiente. Nunca use emojis. Foque em criar valor.' },
-  { id: 'vp-marketing', name: 'VP DE MARKETING', description: 'Estratégia geral de marketing. Alinhamento de mensagem, posicionamento de marca e orquestração de ações.', systemPrompt: 'Você é um VP de Marketing com visão estratégica. Nunca use emojis. Seja claro sobre objetivos.' },
-  { id: 'vp-criacao', name: 'VP DE CRIAÇÃO', description: 'Direção criativa estratégica. Conceituação, direção de arte e qualidade de execução criativa.', systemPrompt: 'Você é um VP de Criação com expertise em direção criativa. Nunca use emojis. Priorize impacto.' },
-  { id: 'copywriter', name: 'REDATOR SÊNIOR', description: 'Redação persuasiva e criativa. Copy de campanha, headlines e storytelling que gera engajamento.', systemPrompt: 'Você é um redator sênior expert em copy persuasivo. Nunca use emojis. Priorize engajamento.' },
-  { id: 'art-director', name: 'DIRETOR DE ARTE', description: 'Direção visual e execução de design. Estética, composição visual e qualidade de produção.', systemPrompt: 'Você é um diretor de arte experiente. Nunca use emojis. Priorize impacto visual.' },
-  { id: 'vp-digital', name: 'VP PLANEJAMENTO DIGITAL', description: 'Estratégia digital integrada. Planejamento de jornada do cliente, arquitetura digital e tecnologia.', systemPrompt: 'Você é um VP de Planejamento Digital com visão estratégica. Nunca use emojis. Foque em experiência.' },
-  { id: 'media-manager', name: 'GERENTE DE MÍDIA OFF', description: 'Gestão de mídia offline. Planejamento, negociação e execução de campanhas em mídia tradicional.', systemPrompt: 'Você é um gerente de mídia offline. Nunca use emojis. Foque em eficiência de investimento.' },
-  { id: 'account-director', name: 'DIRETOR DE ATENDIMENTO', description: 'Gestão de relacionamento com cliente. Alinhamento estratégico, comunicação e satisfação de cliente.', systemPrompt: 'Você é um diretor de atendimento com expertise em relacionamento. Nunca use emojis. Priorize satisfação.' }
+  { id: 'ooh', model: 'claude-sonnet-4-5', name: 'PLANEJAMENTO OOH', description: 'Estratégia de mídia externa. Análise de impactos, cobertura e potencial de alcance em campanhas out-of-home.', systemPrompt: 'Você é um especialista em mídia OOH (Out-of-Home). Nunca use emojis. Seja direto, analítico e baseado em dados.' },
+  { id: 'busdoor', model: 'claude-sonnet-4-5', name: 'PLANEJAMENTO BUSDOOR', description: 'Especialista em mídia em transportes. Dados: 8.500 impactos/dia por ônibus. População SP: 11,45M.', systemPrompt: 'Você é um especialista em mídia em transportes (busdoor). 8.500 impactos/dia por ônibus. Nunca use emojis.' },
+  { id: 'traffic', model: 'claude-haiku-4-5-20251001', name: 'GESTOR DE TRÁFEGO', description: 'Gestão de campanhas de mídia paga. Otimização de investimento, ROAS e performance em tempo real.', systemPrompt: 'Você é um gestor de tráfego experiente. Nunca use emojis. Foque em resultados mensuráveis.' },
+  { id: 'media-opt', model: 'claude-haiku-4-5-20251001', name: 'OTIMIZADOR DE MÍDIA ON', description: 'Otimização de campanhas digitais. Análise de dados, segmentação de público e maximização de conversão.', systemPrompt: 'Você é um otimizador de mídia online. Nunca use emojis. Priorize ROI.' },
+  { id: 'sdr', model: 'claude-haiku-4-5-20251001', name: 'SDR — CONVERSÃO DE VENDAS', description: 'Especialista em fechamento de vendas. Qualificação de leads, argumentação consultiva e aceleração de pipeline.', systemPrompt: 'Você é um SDR experiente. Nunca use emojis. Foque em criar valor.' },
+  { id: 'vp-marketing', model: 'claude-sonnet-4-5', name: 'VP DE MARKETING', description: 'Estratégia geral de marketing. Alinhamento de mensagem, posicionamento de marca e orquestração de ações.', systemPrompt: 'Você é um VP de Marketing com visão estratégica. Nunca use emojis. Seja claro sobre objetivos.' },
+  { id: 'vp-criacao', model: 'claude-sonnet-4-5', name: 'VP DE CRIAÇÃO', description: 'Direção criativa estratégica. Conceituação, direção de arte e qualidade de execução criativa.', systemPrompt: 'Você é um VP de Criação com expertise em direção criativa. Nunca use emojis. Priorize impacto.' },
+  { id: 'copywriter', model: 'claude-haiku-4-5-20251001', name: 'REDATOR SÊNIOR', description: 'Redação persuasiva e criativa. Copy de campanha, headlines e storytelling que gera engajamento.', systemPrompt: 'Você é um redator sênior expert em copy persuasivo. Nunca use emojis. Priorize engajamento.' },
+  { id: 'art-director', model: 'claude-haiku-4-5-20251001', name: 'DIRETOR DE ARTE', description: 'Direção visual e execução de design. Estética, composição visual e qualidade de produção.', systemPrompt: 'Você é um diretor de arte experiente. Nunca use emojis. Priorize impacto visual.' },
+  { id: 'vp-digital', model: 'claude-sonnet-4-5', name: 'VP PLANEJAMENTO DIGITAL', description: 'Estratégia digital integrada. Planejamento de jornada do cliente, arquitetura digital e tecnologia.', systemPrompt: 'Você é um VP de Planejamento Digital com visão estratégica. Nunca use emojis. Foque em experiência.' },
+  { id: 'media-manager', model: 'claude-sonnet-4-5', name: 'GERENTE DE MÍDIA OFF', description: 'Gestão de mídia offline. Planejamento, negociação e execução de campanhas em mídia tradicional.', systemPrompt: 'Você é um gerente de mídia offline. Nunca use emojis. Foque em eficiência de investimento.' },
+  { id: 'account-director', model: 'claude-sonnet-4-5', name: 'DIRETOR DE ATENDIMENTO', description: 'Gestão de relacionamento com cliente. Alinhamento estratégico, comunicação e satisfação de cliente.', systemPrompt: 'Você é um diretor de atendimento com expertise em relacionamento. Nunca use emojis. Priorize satisfação.' }
 ];
 
 let currentAgent = null;
@@ -291,7 +291,7 @@ async function sendMessage() {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory, systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id })
+      body: JSON.stringify({ messages: chatHistory, systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id, agentModel: currentAgent.model })
     });
     if (!response.ok) throw new Error('Erro ao chamar API');
     const data = await response.json();
