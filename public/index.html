@@ -138,6 +138,7 @@ if (localStorage.getItem('theme') === 'light') {
     <button onclick="backToHub()">Voltar ao Hub</button>
   </div>
   <div class="chat-messages" id="chatMessages"></div>
+  <div id="msgCounter" style="text-align:right; font-size:11px; padding:4px 20px 0; color:#6B7280;"></div>
   <div class="chat-input-area">
     <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
     <button id="sendButton" onclick="sendMessage()">Enviar</button>
@@ -162,6 +163,38 @@ const agents = [
 
 let currentAgent = null;
 let chatHistory = [];
+
+const DAILY_LIMIT = 100;
+
+function getMsgKey() {
+  const today = new Date().toISOString().slice(0, 10);
+  return 'msgs_' + today;
+}
+
+function getMsgsUsed() {
+  return parseInt(localStorage.getItem(getMsgKey()) || '0');
+}
+
+function incrementMsgs() {
+  const key = getMsgKey();
+  const used = getMsgsUsed();
+  localStorage.setItem(key, used + 1);
+  updateMsgCounter();
+}
+
+function updateMsgCounter() {
+  const used = getMsgsUsed();
+  const remaining = DAILY_LIMIT - used;
+  const el = document.getElementById('msgCounter');
+  if (el) {
+    el.textContent = remaining + ' mensagens restantes hoje';
+    el.style.color = remaining < 20 ? '#EF4444' : remaining < 50 ? '#F59E0B' : '#6B7280';
+  }
+}
+
+function canSendMessage() {
+  return getMsgsUsed() < DAILY_LIMIT;
+}
 
 function getStorageKey() {
   return 'chat_' + (currentAgent ? currentAgent.id : 'default');
@@ -230,6 +263,7 @@ function openAgent(agentId) {
   if (chatHistory.length === 0) {
     addMessage('assistant', 'Olá! Como posso ajudá-lo?');
   }
+  updateMsgCounter();
 }
 
 function backToHub() {
@@ -279,6 +313,13 @@ async function sendMessage() {
   if (!message) return;
 
   addMessage('user', message);
+  if (!canSendMessage()) {
+    addMessage('assistant', 'Você atingiu o limite de 100 mensagens por dia. O limite é renovado à meia-noite.');
+    button.disabled = false;
+    input.disabled = false;
+    return;
+  }
+  incrementMsgs();
   chatHistory.push({ role: 'user', content: message }); saveHistory();
   input.value = '';
 
@@ -291,7 +332,7 @@ async function sendMessage() {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory, systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id, agentModel: currentAgent.model })
+      body: JSON.stringify({ messages: chatHistory.slice(-10), systemPrompt: currentAgent.systemPrompt, agentId: currentAgent.id, agentModel: currentAgent.model })
     });
     if (!response.ok) throw new Error('Erro ao chamar API');
     const data = await response.json();
