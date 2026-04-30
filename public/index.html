@@ -74,7 +74,7 @@
     .message { display: flex; gap: 15px; animation: slideIn 0.3s ease-out; }
     .message.user { justify-content: flex-end; }
     .message.assistant { justify-content: flex-start; }
-    .message-content { max-width: 70%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; word-break: break-word; overflow-wrap: break-word; white-space: pre-wrap; overflow: visible; }
+    .message-content { max-width: 70%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; word-break: break-word; overflow-wrap: break-word; overflow: visible; }
     .message.user .message-content { background: rgba(255,255,255,0.1); }
     .message.assistant .message-content { background: rgba(255,255,255,0.05); }
     .typing-indicator { display: flex; gap: 4px; padding: 12px 16px; }
@@ -84,7 +84,7 @@
     @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } }
     @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .chat-input-area { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
-    .chat-input-area input, .chat-input-area textarea { flex-grow: 1; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; resize: none; overflow-y: auto; max-height: 120px; min-height: 44px; line-height: 1.5; font-family: inherit; }
+    .chat-input-area input, .chat-input-area textarea { flex-grow: 1; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; resize: none; overflow-y: auto; max-height: 200px; min-height: 44px; line-height: 1.5; font-family: inherit; transition: height 0.1s ease; }
     .chat-input-area input::placeholder, .chat-input-area textarea::placeholder { color: rgba(255,255,255,0.3); }
     .chat-input-area button { padding: 12px 24px; background: #fff; color: #000; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.3s; }
     .chat-input-area button:hover:not(:disabled) { background: rgba(255,255,255,0.9); }
@@ -139,7 +139,7 @@ if (localStorage.getItem('theme') === 'light') {
   </div>
   <div class="chat-messages" id="chatMessages"></div>
   <div class="chat-input-area">
-    <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1"></textarea>
+    <textarea id="chatInput" placeholder="Digite sua mensagem..." rows="1" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,200)+'px'"></textarea>
     <button id="sendButton" onclick="sendMessage()">Enviar</button>
   </div>
 </div>
