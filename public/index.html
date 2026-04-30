@@ -164,7 +164,14 @@ const agents = [
 let currentAgent = null;
 let chatHistory = [];
 
-const DAILY_LIMIT = 100;
+// Planos: starter=70, profissional=100, enterprise=200
+const PLANOS = { starter: 70, profissional: 100, enterprise: 200 };
+
+function getPlano() {
+  return localStorage.getItem('plano') || 'starter';
+}
+
+const DAILY_LIMIT = PLANOS[getPlano()];
 
 function getMsgKey() {
   const today = new Date().toISOString().slice(0, 10);
